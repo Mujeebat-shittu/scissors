@@ -8,9 +8,40 @@ import qrcode from "./assets/images/qrcode.png"
 import shorten from "./assets/images/shorten.png"
 import vertical from "./assets/images/Line 70.png"
 import { Minus, Plus, CircleCheck } from "lucide-react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 
 function App() {
+
+  const [faqs, setFaqs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchFAQs = async () => {
+    try {
+      const res = await axios.get ("https://68a109fc6f8c17b8f5d909a3.mockapi.io/api/ScissorsFAQ/faqs")
+      setFaqs(res.data)
+      
+    } catch (error) {
+      setError(error);
+      
+    } finally {
+      setLoading(false);
+    }
+    
+  };
+
+   useEffect(() => {
+    fetchFAQs(); // auto-fetch on mount
+  }, []);
+
+  if (loading) return <p>Loading FAQs...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+
+
+
   return (
     <>
       <div className="">
@@ -257,74 +288,18 @@ function App() {
             </div>
             <div className="flex flex-col items-start gap-4 justify-center mx-auto w-[50%]">
 
-              <div className=" border-b-1 border-black py-2 px-4">
-                <details>
-                <summary className="m-2 font-bold ">How does URL shortening work? </summary>
-                URL shortening works by taking a long URL and creating a
-                shorter, condensed version that redirects to the original URL.
-                When a user clicks on the shortened link, they are redirected to
-                the intended destination.
-              </details>
-              </div>
-              <div className="border-b-1 border-black py-2 px-4">
-                 <details>
-                <summary className="m-2 font-bold">Is it necessary to create an account to use the URL shortening service</summary>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque perferendis eligendi fugit quaerat consequatur fuga pariatur ratione, enim mollitia aut! Nobis maxime voluptas harum labore quos, tempore itaque quas excepturi.
-              </details>
-            </div>
- 
-          
-            <div className="border-b-1 border-black py-2 px-4">
-              <details>
-                <summary className="m-2 font-bold">Are the shortened links permanent? Will they expire?</summary>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque perferendis eligendi fugit quaerat consequatur fuga pariatur ratione, enim mollitia aut! Nobis maxime voluptas harum labore quos, tempore itaque quas excepturi.
-              </details>
-              </div>
-              
-              <div className="border-b-1 border-black py-2 px-4">
-              <details>
-                <summary className="m-2 font-bold">Are there any limitations on the number of URLs I can shorten?</summary>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque perferendis eligendi fugit quaerat consequatur fuga pariatur ratione, enim mollitia aut! Nobis maxime voluptas harum labore quos, tempore itaque quas excepturi.
-              </details>
+                {faqs.map((faqs) => (
+                  <div className="border-b-1 border-black py-2 px-4">
+                  <details key={faqs.id}>
+                    <summary className="m-2 font-bold">{faqs.question}</summary>
+                    {faqs.answer}
+                  </details>
+                  </div>
+                ))
+                }
+
               </div>
 
-              <div className="border-b-1 border-black py-2 px-4">
-              <details>
-                <summary className="m-2 font-bold">Can I customize the shortened URLs to reflect my brand or
-                content?</summary>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque perferendis eligendi fugit quaerat consequatur fuga pariatur ratione, enim mollitia aut! Nobis maxime voluptas harum labore quos, tempore itaque quas excepturi.
-              </details>
-              </div>
-              
-                <div className="border-b-1 border-black py-2 px-4">
-              <details>
-                <summary className="m-2 font-bold">Can I track the performance of my shortened URLs</summary>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque perferendis eligendi fugit quaerat consequatur fuga pariatur ratione, enim mollitia aut! Nobis maxime voluptas harum labore quos, tempore itaque quas excepturi.
-              </details>
-              </div>
-              <div className="border-b-1 border-black py-2 px-4">
-              <details>
-                <summary className="m-2 font-bold"> How secure is the URL shortening service? Are the shortened
-                links protected against spam or malicious activity?</summary>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque perferendis eligendi fugit quaerat consequatur fuga pariatur ratione, enim mollitia aut! Nobis maxime voluptas harum labore quos, tempore itaque quas excepturi.
-              </details>
-              </div>
-             
-               <div className="border-b-1 border-black py-2 px-4">
-              <details>
-                <summary className="m-2 font-bold">What is a QR code and what can it do?</summary>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque perferendis eligendi fugit quaerat consequatur fuga pariatur ratione, enim mollitia aut! Nobis maxime voluptas harum labore quos, tempore itaque quas excepturi.
-              </details>
-              </div>
-
-              <div className="border-b-1 border-black py-2 px-4">
-              <details >
-                <summary className="m-2 font-bold">Is there an API available for the integrating the URL shortening
-                service into my own applications or websites?</summary>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque perferendis eligendi fugit quaerat consequatur fuga pariatur ratione, enim mollitia aut! Nobis maxime voluptas harum labore quos, tempore itaque quas excepturi.
-              </details>
-              </div>
-              </div>
 
         
           </section>
